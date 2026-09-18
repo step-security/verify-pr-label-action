@@ -23,7 +23,7 @@ inputs:
     required: false
 runs:
   using: 'docker'
-  image: 'Dockerfile'
+  image: 'docker://ghcr.io/step-security/verify-pr-label-action:v1.4.0@sha256:01e50264b72f4ff5ca26de3034ee02e0930cf0645531ec5c97d0010f105ebe93' # v1.4.0
   args:
     - ${{ inputs.valid-labels }}
     - ${{ inputs.invalid-labels }}
