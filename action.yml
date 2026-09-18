@@ -25,8 +25,9 @@ runs:
   using: 'docker'
   image: 'Dockerfile'
   args:
-    - ${{ inputs.github-token }}
     - ${{ inputs.valid-labels }}
     - ${{ inputs.invalid-labels }}
     - ${{ inputs.pull-request-number }}
     - ${{ inputs.disable-reviews }}
+  env:
+    GITHUB_TOKEN: ${{ inputs.github-token }}

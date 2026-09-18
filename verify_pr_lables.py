@@ -3,8 +3,7 @@
 import os
 import sys
 import re
-import distutils.util
-from github import Github
+from github import Github, Auth
 import json
 import urllib.request
 import urllib.error
@@ -103,32 +102,29 @@ def validate_subscription():
 validate_subscription()
 
 # Check if the number of input arguments is correct
-if len(sys.argv) != 6:
+if len(sys.argv) != 5:
     print('ERROR: Invalid number of arguments!', file=sys.stderr)
     sys.exit(1)
 
-# Get the GitHub token
-token = sys.argv[1]
+# Get the GitHub token from environment variable
+token = os.environ.get('GITHUB_TOKEN')
 if not token:
     print('ERROR: A token must be provided!', file=sys.stderr)
     sys.exit(1)
 
 # Get the list of valid labels
-valid_labels = [label.strip() for label in sys.argv[2].split(',')]
+valid_labels = [label.strip() for label in sys.argv[1].split(',')]
 print(f'Valid labels are: {valid_labels}')
 
 # Get the list of invalid labels
-invalid_labels = [label.strip() for label in sys.argv[3].split(',')]
+invalid_labels = [label.strip() for label in sys.argv[2].split(',')]
 print(f'Invalid labels are: {invalid_labels}')
 
 # Get the PR number
-pr_number_str = sys.argv[4]
+pr_number_str = sys.argv[3]
 
 # Are reviews disabled?
-try:
-    pr_reviews_disabled = bool(distutils.util.strtobool(sys.argv[5]))
-except ValueError:
-    pr_reviews_disabled = False
+pr_reviews_disabled = sys.argv[4].lower() in ('true', 'yes', '1', 't', 'y', 'on')
 print(f"PR reviews are: {'disabled' if pr_reviews_disabled else 'enabled'}")
 
 # Get needed values from the environmental variables
@@ -137,7 +133,7 @@ github_ref = get_env_var('GITHUB_REF')
 github_event_name = get_env_var('GITHUB_EVENT_NAME')
 
 # Create a repository object, using the GitHub token
-repo = Github(token).get_repo(repo_name)
+repo = Github(auth=Auth.Token(token)).get_repo(repo_name)
 
 # When this actions runs on a "pull_reques_target" event, the pull request
 # number is not available in the environmental variables; in that case it must

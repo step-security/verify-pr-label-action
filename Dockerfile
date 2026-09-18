@@ -1,6 +1,6 @@
-FROM python:3.6.10-alpine3.10
+FROM python:3.12-alpine
 
-RUN pip3 install pygithub==1.47
+RUN pip3 install pygithub==2.3.0
 
 COPY verify_pr_lables.py /verify_pr_lables.py
 
