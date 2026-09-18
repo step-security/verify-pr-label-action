@@ -1,0 +1,8 @@
+# pip vulnerabilities: pip is used only at build time to install pinned packages.
+# The attack vectors (malicious/crafted wheel installation) cannot occur at runtime
+# since the container entrypoint is a Python script, not pip.
+CVE-2025-8869
+CVE-2026-3219
+CVE-2026-6357
+CVE-2026-8643
+CVE-2026-1703
